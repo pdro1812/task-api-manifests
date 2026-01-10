@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: redis-config
+  name: task-api-config
   namespace: task-api
 data:
   APP_PORT: "3000"
@@ -15,5 +15,5 @@ metadata:
   name: task-api-secret
   namespace: task-api
 type: Opaque
-StringData:
+stringData:
   REDIS_PASSWORD: "minhasenhaforte"
