@@ -8,7 +8,7 @@ spec:
   - port: 6379
     targetPort: 6379
   selector:
-      app: redis  
+    app: redis
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -24,16 +24,14 @@ spec:
     metadata:
       labels:
         app: redis
-  spec:
-        containers:
-        - name: redis
-          image: redis:7-alpine
-          ports:
-          - containerPort: 6379
-          args: ["--requirepass", "minhasenhaforte"]
-          resources:
-            limits:
-              memory: "128Mi"
-              cpu: "250m"
-        
-        
+    spec:
+      containers: # <--- ATENÇÃO: Deve estar alinhado dentro de 'spec'
+      - name: redis
+        image: redis:7-alpine
+        ports:
+        - containerPort: 6379
+        args: ["--requirepass", "minhasenhaforte"]
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "250m"
