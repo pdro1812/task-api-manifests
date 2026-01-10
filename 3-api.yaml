@@ -29,12 +29,11 @@ spec:
   template:
     metadata:
       labels:
-        app: task-api # <--- Deve ser IDÊNTICO ao matchLabels acima
+        app: task-api 
     spec:
       containers:
       - name: task-api
-        # 👇 Lembre de conferir se este é o nome da sua imagem correta
-        image: seu_usuario/task-api:v1 
+        image: pdros1812/task-api:v1 
         imagePullPolicy: Always
         ports:
         - containerPort: 3000

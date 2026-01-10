@@ -25,7 +25,7 @@ spec:
       labels:
         app: redis
     spec:
-      containers: # <--- ATENÇÃO: Deve estar alinhado dentro de 'spec'
+      containers: 
       - name: redis
         image: redis:7-alpine
         ports:
