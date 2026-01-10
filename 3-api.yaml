@@ -35,8 +35,8 @@ metadata:
     spec:
       containers:
       - name: task-api
-        image: task-api:v1
-        imagePullPolicy: IfNotPresent
+        image: pdros1812/task-api:v1
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
 
