@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
       - name: task-api
-        image: pdros1812/task-api:c0db430
+        image: pdros1812/task-api:3b2f80e
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
