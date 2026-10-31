@@ -4,10 +4,11 @@ metadata:
   name: task-api-service
   namespace: task-api
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
   - port: 80
     targetPort: 3000
+    nodePort: 30080
   selector:
     app: task-api
 ---
@@ -34,8 +35,8 @@ spec:
     spec:
       containers:
       - name: task-api
-        image: pdros1812/task-api:5b6f84a
-        imagePullPolicy: Always
+        image: task-api:exp-5b6f84a
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
         envFrom:
