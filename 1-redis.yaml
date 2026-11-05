@@ -10,6 +10,18 @@ spec:
   selector:
     app: redis
 ---
+# Persistência: AOF em volume (StorageClass padrão do cluster; no kind, "standard" / local-path)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-data
+  namespace: task-api
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 1Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,6 +29,9 @@ metadata:
   namespace: task-api
 spec:
   replicas: 1
+  # Volume ReadWriteOnce: o Pod antigo precisa sair antes de o novo montar o mesmo PVC
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: redis
@@ -25,23 +40,38 @@ spec:
       labels:
         app: redis
     spec:
-      containers: 
+      containers:
       - name: redis
         image: redis:7-alpine
         ports:
         - containerPort: 6379
-        args: ["--requirepass", "minhasenhaforte"]
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: task-api-secret
+              key: REDIS_PASSWORD
+        # $(REDIS_PASSWORD) é expandido pelo Kubernetes; a senha não aparece no manifesto
+        args: ["--requirepass", "$(REDIS_PASSWORD)", "--appendonly", "yes", "--dir", "/data"]
+        volumeMounts:
+        - name: data
+          mountPath: /data
         resources:
           limits:
             memory: "128Mi"
             cpu: "250m"
+        # As probes autenticam e exigem PONG (sem autenticação o ping responde NOAUTH com código 0)
         livenessProbe:
           exec:
-            command: ["redis-cli", "ping"]
+            command: ["sh", "-c", "redis-cli -a \"$REDIS_PASSWORD\" --no-auth-warning ping | grep -q PONG"]
           initialDelaySeconds: 5
           periodSeconds: 10
         readinessProbe:
           exec:
-            command: ["redis-cli", "ping"]
+            command: ["sh", "-c", "redis-cli -a \"$REDIS_PASSWORD\" --no-auth-warning ping | grep -q PONG"]
           initialDelaySeconds: 5
           periodSeconds: 10
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: redis-data
