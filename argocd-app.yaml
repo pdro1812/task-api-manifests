@@ -8,7 +8,7 @@ spec:
 
   source:
     repoURL: https://github.com/pdro1812/task-api-manifests
-    targetRevision: HEAD
+    targetRevision: experimento-v2
     path: . 
 
   destination:
