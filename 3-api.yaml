@@ -30,7 +30,10 @@ spec:
   template:
     metadata:
       labels:
-        app: task-api 
+        app: task-api
+      annotations:
+        # Incremente ao selar uma nova senha do Redis: o envFrom só é lido na partida do Pod
+        task-api/redis-secret-rev: "2"
     spec:
       containers:
       - name: task-api
