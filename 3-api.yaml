@@ -38,7 +38,7 @@ spec:
     spec:
       containers:
       - name: task-api
-        image: task-api:v2-quebrada
+        image: task-api:v2-a
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
