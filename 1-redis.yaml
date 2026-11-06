@@ -42,7 +42,8 @@ spec:
     spec:
       containers:
       - name: redis
-        image: redis:7-alpine
+        # Fixado pelo digest usado nas baterias v2 do artigo (Redis 7.4.12)
+        image: redis:7-alpine@sha256:8da19c7399dca900c6822a1cf30f9d2285585e2c4b457ff4095b0f4500054d3f
         ports:
         - containerPort: 6379
         env:
